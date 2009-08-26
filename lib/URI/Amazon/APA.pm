@@ -26,7 +26,7 @@ sub sign {
       strftime( "%Y-%m-%dT%TZ", gmtime() );    # 2009-01-01T12:00:00Z
     $q{Version} ||= '2009-01-01';
     my $sq = join '&',
-      map { $_ . '=' . uri_escape_utf8( $q{$_} ) } sort keys %q;
+      map { $_ . '=' . uri_escape_utf8( $q{$_}, "^A-Za-z0-9\-_.~" ) } sort keys %q;
     my $tosign = join "\n", 'GET', $self->host, $self->path, $sq;
     my $signature = hmac_sha256_base64( $tosign, $arg{secret} );
     $signature .= '=' while length($signature) % 4;    # padding required
